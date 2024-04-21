@@ -80,24 +80,6 @@ def median_filter(img, filter_size=3):
     return median
 
 
-def mse(gt_img, smooth_img):
-    """
-    Calculate the Mean Square Error metric
-    Inputs:
-      gt_img: cv2 image: groundtruth image
-      smooth_img: cv2 image: smoothed image
-    Outputs:
-      mse_score: MSE score
-    """
-    try:
-        gt_img = np.array(gt_img)
-        smooth_img = np.array(smooth_img)
-    except Exception:
-        raise ValueError("Input must be 2D array like format")
-
-    return np.mean(np.power((gt_img - smooth_img), 2))
-
-
 def psnr(gt_img, smooth_img):
     """
     Calculate the PSNR metric
@@ -113,8 +95,8 @@ def psnr(gt_img, smooth_img):
     except Exception:
         raise ValueError("Input must be 2D array like format")
     max_possible_value = 255
-
-    return 20 * np.log10(max_possible_value / np.sqrt(mse(gt_img, smooth_img)))
+    mse = np.mean((gt_img - smooth_img) ** 2)
+    return 10 * np.log10(max_possible_value**2 / mse)
 
 
 def show_res(before_img, after_img):
