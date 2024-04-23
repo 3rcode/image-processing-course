@@ -25,7 +25,6 @@ def DFT_slow(data):
     return DFT
 
 
-
 def show_img(origin, row_fft, row_col_fft):
     """
     Show the original image, row-wise FFT and column-wise FFT
@@ -69,13 +68,25 @@ def DFT_2D(gray_img):
     return row_fft, row_col_fft
 
 
-
+def grayscale_image(image: np.ndarray) -> np.ndarray:
+    """
+    Convert an image to grayscale. Convert the original image to a grayscale image. In a grayscale image, the pixel value of the
+    3 channels will be the same for a particular X, Y coordinate. The equation for the pixel value
+    [1] is given by:
+        p = 0.299R + 0.587G + 0.114B
+    Where the R, G, B are the values for each of the corresponding channels. We will do this by
+    creating an array called img_gray with the same shape as img
+    """
+    gray_img = 0.299 * image[:, :, 0:1] + 0.587 * image[:, :, 1:2] + 0.114 * image[:, :, 2:3]
+    return gray_img.astype(image.dtype)[:, :, 0]
 
 if __name__ == '__main__':
     # ex1
     x = np.random.random(1024)
     print(np.allclose(DFT_slow(x), np.fft.fft(x)))
     # ex2
+    # img = cv2.imread("/home/lvdthieu/Documents/Projects/image-processing/Experiment/images/img.jpg")
+    # gray_img = grayscale_image(img)
     img = io_url.imread('https://img2.zergnet.com/2309662_300.jpg')
     gray_img = np.mean(img, -1)
     row_fft, row_col_fft = DFT_2D(gray_img)
