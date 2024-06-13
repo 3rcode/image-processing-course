@@ -1,8 +1,7 @@
+import cv2
+import matplotlib.pyplot as plt
 import numpy as np
 from skimage import io as io_url
-import matplotlib.pyplot as plt
-import cv2
-
 
 
 def DFT_slow(data):
@@ -11,7 +10,7 @@ def DFT_slow(data):
     params:
         data: Nx1: (N, ): 1D numpy array
     returns:
-        DFT: Nx1: 1D numpy array 
+        DFT: Nx1: 1D numpy array
     """
     N = data.shape[0]
     DFT = np.zeros((N,), dtype=np.complex_)
@@ -32,18 +31,18 @@ def show_img(origin, row_fft, row_col_fft):
     params:
         origin: (H, W): 2D numpy array
         row_fft: (H, W): 2D numpy array
-        row_col_fft: (H, W): 2D numpy array    
+        row_col_fft: (H, W): 2D numpy array
     """
     fig, axs = plt.subplots(nrows=1, ncols=3, figsize=(12, 8))
-    axs[0].imshow(origin, cmap='gray')
-    axs[0].set_title('Original Image')
-    axs[0].axis('off')
-    axs[1].imshow(np.log(np.abs(np.fft.fftshift(row_fft))), cmap='gray')
-    axs[1].set_title('Row-wise FFT')
-    axs[1].axis('off')
-    axs[2].imshow((np.log(np.abs(np.fft.fftshift(row_col_fft)))), cmap='gray')
-    axs[2].set_title('Column-wise FFT')
-    axs[2].axis('off')
+    axs[0].imshow(origin, cmap="gray")
+    axs[0].set_title("Original Image")
+    axs[0].axis("off")
+    axs[1].imshow(np.log(np.abs(np.fft.fftshift(row_fft))), cmap="gray")
+    axs[1].set_title("Row-wise FFT")
+    axs[1].axis("off")
+    axs[2].imshow((np.log(np.abs(np.fft.fftshift(row_col_fft)))), cmap="gray")
+    axs[2].set_title("Column-wise FFT")
+    axs[2].axis("off")
     plt.show()
 
 
@@ -53,7 +52,7 @@ def DFT_2D(gray_img):
     Note that: dtype of the output should be complex_
     params:
         gray_img: (H, W): 2D numpy array
-        
+
     returns:
         row_fft: (H, W): 2D numpy array that contains the row-wise FFT of the input image
         row_col_fft: (H, W): 2D numpy array that contains the column-wise FFT of the input image
@@ -77,21 +76,20 @@ def grayscale_image(image: np.ndarray) -> np.ndarray:
     Where the R, G, B are the values for each of the corresponding channels. We will do this by
     creating an array called img_gray with the same shape as img
     """
-    gray_img = 0.299 * image[:, :, 0:1] + 0.587 * image[:, :, 1:2] + 0.114 * image[:, :, 2:3]
+    gray_img = (
+        0.299 * image[:, :, 0:1] + 0.587 * image[:, :, 1:2] + 0.114 * image[:, :, 2:3]
+    )
     return gray_img.astype(image.dtype)[:, :, 0]
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     # ex1
     x = np.random.random(1024)
     print(np.allclose(DFT_slow(x), np.fft.fft(x)))
     # ex2
     # img = cv2.imread("/home/lvdthieu/Documents/Projects/image-processing/Experiment/images/img.jpg")
     # gray_img = grayscale_image(img)
-    img = io_url.imread('https://img2.zergnet.com/2309662_300.jpg')
+    img = io_url.imread("https://img2.zergnet.com/2309662_300.jpg")
     gray_img = np.mean(img, -1)
     row_fft, row_col_fft = DFT_2D(gray_img)
     show_img(gray_img, row_fft, row_col_fft)
-
- 
-
-
